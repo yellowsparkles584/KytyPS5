@@ -869,27 +869,23 @@ public:
 		                           : VirtualMemory::Mode::ReadWrite;
 
 #if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
-		auto* ptr = VirtualAlloc2(GetCurrentProcess(), reinterpret_cast<void*>(vaddr), size,
-		                          MEM_RESERVE | MEM_COMMIT | MEM_REPLACE_PLACEHOLDER,
-		                          GetProtect(host_mode), nullptr, 0);
-		if (ptr == nullptr || reinterpret_cast<uint64_t>(ptr) != vaddr) {
-			if (ptr != nullptr) {
-				VirtualFree(ptr, 0, MEM_RELEASE);
-			}
-			AddFreeUnlocked(vaddr, size);
-			return false;
-		}
-		EXIT_IF(!AddMappedUnlocked(vaddr, size, MappingType::Private));
-		return true;
-#else
-		if (VirtualMemory::Protect(vaddr, size, host_mode)) {
-			EXIT_IF(!AddMappedUnlocked(vaddr, size, MappingType::Private));
-			return true;
-		}
-		AddFreeUnlocked(vaddr, size);
-		return false;
+    if (info.State == MEM_FREE && reserve_end > reserve_start &&
+        reserve_end - reserve_start > MinimumRegionSize) {
+        auto* ptr = VirtualAlloc2(
+            process, reinterpret_cast<void*>(reserve_start), reserve_end - reserve_start,
+            MEM_RESERVE | MEM_RESERVE_PLACEHOLDER, PAGE_NOACCESS, nullptr, 0);
+        if (reinterpret_cast<uint64_t>(ptr) != reserve_start) {
+            if (ptr != nullptr) {
+                VirtualFree(ptr, 0, MEM_RELEASE);
+            }
+            next_addr = region_end;
+            continue;
+        }
+        AddFreeUnlocked(reserve_start, reserve_end - reserve_start);
+        m_owned.emplace_back(reserve_start, reserve_end - reserve_start);
+    }
 #endif
-	}
+}
 
 	bool ReleaseCommitted(uint64_t vaddr, uint64_t size) {
 		if (vaddr == 0 || size == 0 || !IsPageAligned(vaddr) || !IsPageAligned(size)) {
@@ -1100,7 +1096,6 @@ private:
 		const std::array<std::pair<uint64_t, uint64_t>, 3> regions {{
 		    {HOST_SYSTEM_MANAGED_MIN, HOST_SYSTEM_RESERVED_MAX + 1u},
 		    {HOST_USER_MIN, HOST_USER_MAX + 1u},
-		    {kExtendedMemoryBase, kExtendedMemoryBase + kExtendedMemorySize},
 		}};
 
 #if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
