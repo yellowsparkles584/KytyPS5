@@ -251,9 +251,8 @@ static void VulkanFindPhysicalDevice(vk::Instance instance, vk::SurfaceKHR surfa
 #endif
 #if !defined(__APPLE__)
 		check_feature(device_features2.features.depthClamp, "depthClamp");
-		check_feature(fragment_barycentric.fragmentShaderBarycentric, "fragmentShaderBarycentric");
 #endif
-
+		check_feature(fragment_barycentric.fragmentShaderBarycentric, "fragmentShaderBarycentric");
 		check_feature(features12.samplerMirrorClampToEdge, "samplerMirrorClampToEdge",
 		              required_features12.samplerMirrorClampToEdge);
 		check_feature(features12.timelineSemaphore, "timelineSemaphore",
