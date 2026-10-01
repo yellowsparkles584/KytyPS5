@@ -246,13 +246,13 @@ static void VulkanFindPhysicalDevice(vk::Instance instance, vk::SurfaceKHR surfa
 		if (depth_clip_enable.depthClipEnable != VK_TRUE) {
 			LOGF("depthClipEnable is not supported\n");
 		}
+		check_feature(fragment_barycentric.fragmentShaderBarycentric, "fragmentShaderBarycentric");
 #else
 		check_feature(depth_clip_enable.depthClipEnable, "depthClipEnable");
 #endif
 #if !defined(__APPLE__)
-		check_feature(device_features2.features.depthClamp, "depthClamp");
+		check_feature(device_features2.features.depthClamp, "depthClamp");		
 #endif
-		check_feature(fragment_barycentric.fragmentShaderBarycentric, "fragmentShaderBarycentric");
 		check_feature(features12.samplerMirrorClampToEdge, "samplerMirrorClampToEdge",
 		              required_features12.samplerMirrorClampToEdge);
 		check_feature(features12.timelineSemaphore, "timelineSemaphore",
