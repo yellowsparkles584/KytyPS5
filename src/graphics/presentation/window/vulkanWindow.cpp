@@ -564,7 +564,7 @@ static vk::Device VulkanCreateDevice(GraphicContext& graphics,
 	vk::PhysicalDeviceFragmentShaderBarycentricFeaturesKHR fragment_barycentric {};
 	fragment_barycentric.pNext                     = &features12;
 	fragment_barycentric.fragmentShaderBarycentric = VK_TRUE;
-	robustness2.pNext      = &fragment_barycentric;
+	robustness2.pNext                              = &fragment_barycentric;
 #else
 	robustness2.pNext = &features12;
 #endif
