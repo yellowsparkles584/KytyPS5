@@ -24,8 +24,8 @@ struct Lifecycle {
 using callback_func_t = void (*)(uintptr_t addr, size_t size);
 
 constexpr uint32_t KERNEL_MAXIMUM_NAME_LENGTH = 32;
-constexpr uint64_t kExtendedMemoryBase       = 0x06fffff0000ull;
-constexpr uint64_t kExtendedMemorySize       = 0x06fffff0000ull;
+constexpr uint64_t kExtendedMemoryBase       = 0x06ff0000000ull;
+constexpr uint64_t kExtendedMemorySize       = 0x06ff0000000ull;
 
 struct VirtualQueryInfo {
 	uintptr_t start;
