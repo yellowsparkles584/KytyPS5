@@ -1,7 +1,7 @@
 // Internal memory address-space helpers included by memory.cpp.
 // Kept in the same translation unit because they depend on memory.cpp-local helpers.
 
-static constexpr uint64_t HOST_SYSTEM_MANAGED_MIN  = 0x0000040000ull;
+static constexpr uint64_t HOST_SYSTEM_MANAGED_MIN  = 0x0080000000ull;
 static constexpr uint64_t HOST_SYSTEM_MANAGED_MAX  = 0x07ffffbfffull;
 #if defined(__APPLE__) && (defined(__x86_64__) || defined(_M_X64))
 static constexpr uint64_t HOST_SYSTEM_RESERVED_MAX = 0x0fbfffffffull;
@@ -10,7 +10,7 @@ static constexpr uint64_t HOST_USER_MIN            = 0x7000000000ull;
 static constexpr uint64_t HOST_SYSTEM_RESERVED_MAX = 0x0fffffffffull;
 static constexpr uint64_t HOST_USER_MIN            = 0x1000000000ull;
 #endif
-static constexpr uint64_t HOST_USER_MAX = 0xfbffffffffull;
+static constexpr uint64_t HOST_USER_MAX = 0x0000006fffff0000ull;
 
 static bool GuestFreeRangeContains(uint64_t base, uint64_t range_size, uint64_t candidate,
                                    uint64_t size) {
