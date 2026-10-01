@@ -207,11 +207,11 @@ static void VulkanFindPhysicalDevice(vk::Instance instance, vk::SurfaceKHR surfa
 
 		vk::PhysicalDeviceVulkan12Features features12 {};
 #if defined(__APPLE__)
-		features12.pNext = &depth_clip_control;
-#else
 		vk::PhysicalDeviceFragmentShaderBarycentricFeaturesKHR fragment_barycentric {};
 		fragment_barycentric.pNext = &depth_clip_control;
 		features12.pNext           = &fragment_barycentric;
+#else
+		features12.pNext = &depth_clip_control;
 #endif
 		features13.pNext       = &features12;
 		device_features2.pNext = &features13;
@@ -561,12 +561,12 @@ static vk::Device VulkanCreateDevice(GraphicContext& graphics,
 
 	vk::PhysicalDeviceRobustness2FeaturesEXT robustness2 {};
 #if defined(__APPLE__)
-	robustness2.pNext = &features12;
-#else
 	vk::PhysicalDeviceFragmentShaderBarycentricFeaturesKHR fragment_barycentric {};
 	fragment_barycentric.pNext                     = &features12;
 	fragment_barycentric.fragmentShaderBarycentric = VK_TRUE;
-	robustness2.pNext                              = &fragment_barycentric;
+	robustness2.pNext      = &fragment_barycentric;
+#else
+	robustness2.pNext = &features12;
 #endif
 	if (robustness2_ext_enabled) {
 		robustness2.robustBufferAccess2 = supported_robustness2.robustBufferAccess2;
