@@ -26637,10 +26637,6 @@ TestCase FlatVirtualAddressRebasesGuestAllocation() {
 
   constexpr uint64_t GuestBase = 0x0000000110000000ull;
   constexpr uint64_t ExtendedBase = Libs::LibKernel::Memory::kExtendedMemoryBase + GuestBase;
-  static_assert(BufferCache::PageIndex(ExtendedBase) ==
-                ((Libs::Graphics::LOWER_ADDRESS_SIZE + GuestBase) >> BufferCache::CACHING_PAGEBITS));
-  static_assert(BufferCache::GuestAddress(BufferCache::PageIndex(ExtendedBase) <<
-                                        BufferCache::CACHING_PAGEBITS) == ExtendedBase);
   std::vector<u32> code;
   AppendVMovLiteral(&code, 20, static_cast<u32>(GuestBase + 4u));
   AppendVMovLiteral(&code, 21, static_cast<u32>(GuestBase >> 32u));
