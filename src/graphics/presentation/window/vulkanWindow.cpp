@@ -577,10 +577,10 @@ static vk::Device VulkanCreateDevice(GraphicContext& graphics,
 	auto features13 = WindowContext::RequiredVulkan13Features();
 #if defined(__APPLE__)
 	features13.pNext = robustness2_ext_enabled ? static_cast<void*>(&robustness2)
-	                                           : static_cast<void*>(&features12);
+	                                           : static_cast<void*>(&fragment_barycentric);
 #else
 	features13.pNext = robustness2_ext_enabled ? static_cast<void*>(&robustness2)
-	                                           : static_cast<void*>(&fragment_barycentric);
+	                                           : static_cast<void*>(&features12);
 #endif
 	features13.robustImageAccess   = supported_features13.robustImageAccess;
 	features13.subgroupSizeControl =
